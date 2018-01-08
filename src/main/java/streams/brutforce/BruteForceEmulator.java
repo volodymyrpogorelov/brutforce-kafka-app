@@ -9,7 +9,7 @@ import java.util.Properties;
 public class BruteForceEmulator implements Runnable{
 
     private final String topic;
-    private final int throughput; // meassured in meassages per second
+    private final int throughput; // meassured in logging attemets per second
 
     public BruteForceEmulator(String topic, int throughput) {
         this.topic = topic;
@@ -36,7 +36,7 @@ public class BruteForceEmulator implements Runnable{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                producer.send(new ProducerRecord<String, String>(topic, Integer.toString(i), new User("login" + i,"pass" + i).toString()));
+                producer.send(new ProducerRecord<String, String>(topic, "1", new User("login" + i,"pass" + i).toString()));
             }
         }
 
