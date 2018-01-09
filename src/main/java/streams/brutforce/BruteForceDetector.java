@@ -57,7 +57,7 @@ public class BruteForceDetector implements Runnable{
 
 
         // write to the result topic
-        anomalousLoggingForConsole.to("anomalous-logging-attempts");
+        anomalousLoggingForConsole.to("anomalous-logging-attempts", Produced.with(Serdes.String(), Serdes.Long()));
 
         final Topology topology = builder.build();
         final KafkaStreams streams = new KafkaStreams(topology, streamsConfiguration);
