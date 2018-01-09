@@ -36,7 +36,7 @@ public class BruteForceEmulator implements Runnable{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                producer.send(new ProducerRecord<String, String>(topic, "1", new User("login" + i,"pass" + i).toString()));
+                producer.send(new ProducerRecord<String, String>(topic, "login1", new User("login1","pass" + i).toString()));
             }
         }
 

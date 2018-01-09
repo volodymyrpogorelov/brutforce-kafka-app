@@ -48,16 +48,12 @@ public class BruteForceDetector implements Runnable{
 
         KStream<String, Long> anomalousLoggingForConsole = anomalousLogging
                 .toStream()
-                // sanitize the output by removing null record values (again, we do this only so that the
-                // output is easier to read via kafka-console-consumer combined with LongDeserializer
-                // because LongDeserializer fails on null values, and even though we could configure
-                // kafka-console-consumer to skip messages on error the output still wouldn't look pretty)
+                // removing empty windows
                 .filter((windowedLogin, count) -> count != null)
                 .map((windowedLogin, count) -> new KeyValue<>(windowedLogin.toString(), count));
 
-
         // write to the result topic
-        anomalousLoggingForConsole.to("anomalous-logging-attempts", Produced.with(Serdes.String(), Serdes.Long()));
+        anomalousLoggingForConsole.to("streams-wordcount-output2", Produced.with(Serdes.String(), Serdes.Long()));
 
         final Topology topology = builder.build();
         final KafkaStreams streams = new KafkaStreams(topology, streamsConfiguration);
