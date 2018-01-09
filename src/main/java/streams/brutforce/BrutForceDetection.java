@@ -5,7 +5,7 @@ public class BrutForceDetection {
     public static void main(String[] args){
 
         String topic = "my-topic";
-        int loggingAttemptsPerSecond = 3; // logging attempts per second
+        int loggingAttemptsPerSecond = 10; // logging attempts per second
 
 
         Thread tprocducer = new Thread(new BruteForceEmulator(topic, loggingAttemptsPerSecond));

@@ -38,10 +38,10 @@ public class BruteForceDetector implements Runnable{
 
         KTable<Windowed<String>, Long> anomalousLogging = loggingAttempts
                 .groupByKey()
-                .windowedBy(TimeWindows.of(timeInterval * 1000L))
+                //.windowedBy(JoinWindows.of(timeInterval * 1000L))
+                .windowedBy(TimeWindows.of(timeInterval * 1000L).advanceBy(100L))
                 .count()
                 .filter((login, count) -> count >= numOfMaxLoggingAttemptsPerTimeInterval);
-
 
         final Serde<String> stringSerde = Serdes.String();
         final Serde<Long> longSerde = Serdes.Long();
@@ -53,7 +53,7 @@ public class BruteForceDetector implements Runnable{
                 .map((windowedLogin, count) -> new KeyValue<>(windowedLogin.toString(), count));
 
         // write to the result topic
-        anomalousLoggingForConsole.to("streams-wordcount-output2", Produced.with(Serdes.String(), Serdes.Long()));
+        anomalousLoggingForConsole.to("streams-wordcount-output2", Produced.with(stringSerde, longSerde));
 
         final Topology topology = builder.build();
         final KafkaStreams streams = new KafkaStreams(topology, streamsConfiguration);
